@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>نموذج إرسال إلى واتساب</title>
+</head>
+<body>
+
+    <form id="contactForm">
+        <h3>📝 نموذج التواصل عبر واتساب</h3>
+
+        <label for="clientName">الاسم:</label>
+        <input type="text" id="clientName" name="clientName" required><br><br>
+
+        <label for="clientEmail">البريد الإلكتروني (اختياري):</label>
+        <input type="email" id="clientEmail" name="clientEmail"><br><br>
+
+        <label for="clientMessage">الرسالة:</label>
+        <textarea id="clientMessage" name="clientMessage" rows="4" required></textarea><br><br>
+
+        <button type="button" onclick="sendToWhatsApp(event)">
+            إرسال عبر واتساب
+        </button>
+    </form>
+
+    <script>
+        function sendToWhatsApp(event) {
+            // **هام:** تأكد أن هذا المتغير يحتوي على رقمك بالصيغة الدولية **بدون علامة + أو أصفار إضافية**.
+            // مثال: إذا كان رقمك في مصر هو 01012345678، يصبح 201012345678
+            // مثال: إذا كان رقمك في السعودية هو 0501234567، يصبح 966501234567
+            const phoneNumber = "201116156583"; 
+
+            // 1. جمع البيانات من الحقول باستخدام المعرف (ID)
+            const name = document.getElementById('clientName').value;
+            const email = document.getElementById('clientEmail').value;
+            const message = document.getElementById('clientMessage').value;
+
+            // 2. التحقق من رقم الهاتف لمنع الأخطاء
+            if (phoneNumber === "YOUR_WHATSAPP_NUMBER_HERE" || !phoneNumber) {
+                alert("الرجاء تحديد رقم الهاتف المستقبِل في كود JavaScript أولاً.");
+                return;
+            }
+
+            // 3. تنسيق الرسالة لـ WhatsApp
+            // نستخدم %0A للسطر الجديد
+            let formattedMessage = 
+                "رسالة جديدة من الموقع:" + "%0A" + 
+                "--------------------------" + "%0A" + 
+                "الاسم: " + (name || "غير محدد") + "%0A" +
+                "البريد الإلكتروني: " + (email || "لم يتم إدخاله") + "%0A" +
+                "الرسالة: " + (message || "رسالة فارغة");
+
+            // 4. تشفير الرسالة وإنشاء الرابط
+            const encodedMessage = encodeURIComponent(formattedMessage);
+            const whatsappURL = "https://wa.me/" + phoneNumber + "?text=" + encodedMessage;
+
+            // 5. فتح الرابط في نافذة جديدة
+            window.open(whatsappURL, '_blank');
+        }
+    </script>
+
+</body>
+</html>
