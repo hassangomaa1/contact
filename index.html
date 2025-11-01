@@ -25,42 +25,38 @@
 
     <script>
         function sendToWhatsApp(event) {
-            // **هام:** تأكد أن هذا المتغير يحتوي على رقمك بالصيغة الدولية **بدون علامة + أو أصفار إضافية**.
-            // مثال: إذا كان رقمك في مصر هو 01012345678، يصبح 201012345678
-            // مثال: إذا كان رقمك في السعودية هو 0501234567، يصبح 966501234567
-            const phoneNumber = "201116156583"; 
+    event.preventDefault(); 
+    
+    // 🌟 الخطوة 1: تحديد رقم الواتساب (تحقق مرة أخرى من صيغته الدولية بدون علامة +)
+    const phoneNumber = "YOUR_WHATSAPP_NUMBER_HERE"; 
 
-            // 1. جمع البيانات من الحقول باستخدام المعرف (ID)
-            const name = document.getElementById('clientName').value;
-            const email = document.getElementById('clientEmail').value;
-            const message = document.getElementById('clientMessage').value;
+    // 2. جمع البيانات
+    const name = document.getElementById('clientName').value;
+    const email = document.getElementById('clientEmail').value;
+    const message = document.getElementById('clientMessage').value;
 
-            // 2. التحقق من رقم الهاتف لمنع الأخطاء
-            if (phoneNumber === "YOUR_WHATSAPP_NUMBER_HERE" || !phoneNumber) {
-                alert("الرجاء تحديد رقم الهاتف المستقبِل في كود JavaScript أولاً.");
-                return;
-            }
+    if (phoneNumber === "YOUR_WHATSAPP_NUMBER_HERE" || !phoneNumber) {
+        alert("الرجاء تحديد رقم الهاتف المستقبِل في كود JavaScript أولاً.");
+        return;
+    }
 
-            // 3. تنسيق الرسالة لـ WhatsApp
-// نستخدم %0D%0A لعمل سطر جديد (بديل لـ %0A)
-let formattedMessage = 
-    "✅ طلب تواصل جديد من الموقع" + "%0D%0A" + // سطر جديد
-    "➖➖➖➖➖➖➖➖➖➖" + "%0D%0A" +       // سطر جديد
-    "👤 الاسم: " + (name || "غير محدد") + "%0D%0A" + // سطر جديد
-    "📧 البريد الإلكتروني: " + (email || "لم يتم إدخاله") + "%0D%0A" + // سطر جديد
-    "💬 الرسالة:" + "%0D%0A" +                   // سطر جديد قبل نص الرسالة
-    (message || "رسالة فارغة");
+    // ✍️ الخطوة 3: تنسيق الرسالة باستخدام \n للأسطر الجديدة
+    // الآن، نستخدم \n العادية، وستقوم الدالة encodeURIComponent بتحويلها تلقائيًا إلى %0A.
+    const rawMessage = 
+        "✅ طلب تواصل جديد من الموقع" + "\n" + 
+        "---------------------------------" + "\n" + 
+        "👤 الاسم: " + (name || "غير محدد") + "\n" +
+        "📧 البريد الإلكتروني: " + (email || "لم يتم إدخاله") + "\n" +
+        "💬 الرسالة:" + "\n" + 
+        (message || "رسالة فارغة");
 
-// ... باقي الكود ... 
+    // 🔗 الخطوة 4: التشفير وإنشاء الرابط (هذا هو المفتاح)
+    const encodedMessage = encodeURIComponent(rawMessage);
+    const whatsappURL = "https://wa.me/" + phoneNumber + "?text=" + encodedMessage;
 
-            // 4. تشفير الرسالة وإنشاء الرابط
-            const encodedMessage = encodeURIComponent(formattedMessage);
-            const whatsappURL = "https://wa.me/" + phoneNumber + "?text=" + encodedMessage;
-
-            // 5. فتح الرابط في نافذة جديدة
-            window.open(whatsappURL, '_blank');
-        }
-    </script>
-
+    // 🚀 الخطوة 5: فتح نافذة الواتساب
+    window.open(whatsappURL, '_blank'); 
+}
+</script> 
 </body>
 </html>
